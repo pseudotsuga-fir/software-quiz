@@ -31,5 +31,8 @@ backend/tmp/storage/*
 
 backend/public/assets
 
-# Ifnore vendor files
+# Ignore vendor files
 backend/vendor
+
+# Ignore sqlite database
+backend/db/*.sqlite3*
