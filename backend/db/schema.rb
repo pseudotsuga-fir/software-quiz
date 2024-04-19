@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_18_224118) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_19_005153) do
   create_table "question", force: :cascade do |t|
     t.integer "quiz_id"
     t.string "question"
@@ -32,6 +32,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_18_224118) do
     t.integer "score"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "key"
+    t.index ["key"], name: "index_quiz_on_key", unique: true
   end
 
   add_foreign_key "question", "quizzes"
