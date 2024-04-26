@@ -1,6 +1,8 @@
 # This configuration file will be evaluated by Puma. The top-level methods that
 # are invoked here are part of Puma's configuration DSL. For more information
 # about methods provided by the DSL, see https://puma.io/puma/Puma/DSL.html.
+require "dotenv"
+Dotenv.load("../.env")
 
 # Puma can serve each request in a thread from an internal thread pool.
 # The `threads` method setting takes two numbers: a minimum and maximum.
@@ -23,8 +25,7 @@ end
 worker_timeout 3600 if ENV.fetch("RAILS_ENV", "development") == "development"
 
 # Specifies the IP and port to listen on.
-bind 'tcp://127.0.0.1:3008'
-
+bind "tcp://127.0.0.1:3008"
 
 # Specifies the `environment` that Puma will run in.
 environment ENV.fetch("RAILS_ENV") { "development" }

@@ -36,3 +36,6 @@ backend/vendor
 
 # Ignore sqlite database
 backend/db/*.sqlite3*
+
+backend/.byebug_history
+backend/config/master.key
