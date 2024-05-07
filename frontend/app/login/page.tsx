@@ -1,24 +1,24 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useFetch } from "use-http";
 
 export default function Login() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { post, cache, response } = useFetch(
-    `http://localhost:3008/auth/login`
-  );
+  const { post, cache, response } = useFetch(`/auth/login`);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    await post({ user: { email: email, password: password } });
+    await post({
+      user: { email: email, password: password },
+      credentials: "include",
+    });
     if (response.ok) {
-      const authHeaders = response.headers.get("Authorization");
-      if (authHeaders) {
-        localStorage.setItem("session", authHeaders);
-      }
+      router.push("/");
     } else {
       console.log("Error", response);
     }
