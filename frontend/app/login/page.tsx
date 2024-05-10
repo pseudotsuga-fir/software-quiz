@@ -21,7 +21,7 @@ export default function Login() {
     if (response.ok) {
       const user = await response.json();
       useUserStore.setState({ user: user.data.user });
-      router.push("/");
+      router.push("/dashboard/quiz/new");
     } else {
       console.log("Error", response);
       useUserStore.setState({ user: undefined });

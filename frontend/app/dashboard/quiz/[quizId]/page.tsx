@@ -84,6 +84,7 @@ export default function CRUDQuiz({
             <TextInput
               label="Title*"
               placeholder="Quiz Title"
+              value={quiz?.title}
               onChange={(title: string) => {
                 setQuiz({ ...quiz, title: title });
               }}
@@ -92,6 +93,7 @@ export default function CRUDQuiz({
               className={styles.timeLimit}
               label="Time Limit (In Minutes)*"
               placeholder="30"
+              value={quiz?.time_limit}
               onChange={(limit: string) => {
                 setQuiz({ ...quiz, time_limit: limit });
               }}
