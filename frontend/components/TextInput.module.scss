@@ -1,0 +1,14 @@
+.textInput {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+
+  input {
+    height: 24px;
+
+    &.invalid {
+      border: 1px solid red;
+    }
+  }
+}

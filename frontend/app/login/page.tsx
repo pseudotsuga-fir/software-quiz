@@ -10,7 +10,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { post, cache, response } = useFetch(`/auth/login`);
+  const { post, cache, response } = useFetch(`/api/auth/login`);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
