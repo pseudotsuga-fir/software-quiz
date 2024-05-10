@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import TextInput from "@/components/TextInput";
+import { useFetch } from "use-http";
 import { FaTrash } from "react-icons/fa";
+import TextInput from "@/components/TextInput";
 import { Quiz, Question } from "@/types";
 import styles from "./quiz.module.scss";
 
@@ -12,10 +13,15 @@ export default function CRUDQuiz({
   params: { quizId: string };
 }): React.ReactElement {
   const [quiz, setQuiz] = useState<Quiz>();
-  const [formErrors, setFormErrors] = useState<string[]>([]);
+  // const [formErrors, setFormErrors] = useState<string[]>([]);
 
   useEffect(() => {
     if (params.quizId !== "new") {
+      fetch(`/api/quizzes/${params.quizId}`)
+        .then((res) => res.json())
+        .then((quiz) => {
+          setQuiz(quiz);
+        });
     }
   }, []);
 
@@ -26,13 +32,30 @@ export default function CRUDQuiz({
     });
   }
 
+  const { post, cache, response } = useFetch(`/api/quizzes`);
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    await post(params.quizId !== "new" ? `/${quiz?.id}` : "", {
+      quiz: JSON.stringify(quiz),
+    });
+    if (response.ok) {
+      const quiz = await response.json();
+      setQuiz(quiz);
+      window.history.replaceState(null, "", `/dashboard/quiz/${quiz.id}`);
+    } else {
+      console.log("Error", response);
+    }
+    cache.clear();
+  }
+
   function handleOptionToggle(
     question: Question,
     index: number,
     option: string,
     e: React.ChangeEvent<HTMLInputElement>
   ) {
-    if (question?.type === "multiple_choice") {
+    if (question?.question_type === "multiple_choice") {
       updateQuestion(index, {
         ...question,
         answers: [option],
@@ -55,23 +78,28 @@ export default function CRUDQuiz({
   return (
     <div className={styles.quizBody}>
       {quiz?.id ? <h2>Edit "{quiz?.title}"</h2> : <h2>Create a new quiz</h2>}
-      <form>
+      <form onSubmit={onSubmit}>
         <div className={styles.header}>
-          <TextInput
-            label="Title*"
-            placeholder="Quiz Title"
-            onChange={(title: string) => {
-              setQuiz({ ...quiz, title: title });
-            }}
-          />
-          <TextInput
-            className={styles.timeLimit}
-            label="Time Limit (In Minutes)*"
-            placeholder="30"
-            onChange={(limit: string) => {
-              setQuiz({ ...quiz, time_limit: new Date(limit) });
-            }}
-          />
+          <div className={styles.left}>
+            <TextInput
+              label="Title*"
+              placeholder="Quiz Title"
+              onChange={(title: string) => {
+                setQuiz({ ...quiz, title: title });
+              }}
+            />
+            <TextInput
+              className={styles.timeLimit}
+              label="Time Limit (In Minutes)*"
+              placeholder="30"
+              onChange={(limit: string) => {
+                setQuiz({ ...quiz, time_limit: limit });
+              }}
+            />
+          </div>
+          <div className={styles.right}>
+            <button type="submit">Save Quiz</button>
+          </div>
         </div>
         <div className={styles.questions}>
           <h3>Questions</h3>
@@ -83,7 +111,7 @@ export default function CRUDQuiz({
                   ...(quiz?.questions || []),
                   {
                     question: "New Question",
-                    type: "multiple_choice",
+                    question_type: "multiple_choice",
                     options: ["Option 1", "Option 2", "Option 3"],
                     answers: ["Option 1"],
                   },
@@ -116,7 +144,8 @@ export default function CRUDQuiz({
                       onChange={(e) => {
                         updateQuestion(index, {
                           ...question,
-                          type: e.currentTarget.value as Question["type"],
+                          question_type: e.currentTarget
+                            .value as Question["question_type"],
                           answers: [],
                         });
                       }}
@@ -140,8 +169,8 @@ export default function CRUDQuiz({
                       });
                     }}
                   />
-                  {(question.type === "multiple_choice" ||
-                    question.type === "select_all") && (
+                  {(question.question_type === "multiple_choice" ||
+                    question.question_type === "select_all") && (
                     <div className={styles.options}>
                       <div className={styles.optionHeaders}>
                         <p>Answer</p>
@@ -152,7 +181,7 @@ export default function CRUDQuiz({
                           <input
                             className={styles.isAnswer}
                             type={
-                              question.type === "multiple_choice"
+                              question.question_type === "multiple_choice"
                                 ? "radio"
                                 : "checkbox"
                             }
@@ -176,7 +205,18 @@ export default function CRUDQuiz({
                               });
                             }}
                           />
-                          <button className={styles.delete}>
+                          <button
+                            type="button"
+                            className={styles.delete}
+                            onClick={() => {
+                              updateQuestion(index, {
+                                ...question,
+                                options: question.options?.filter(
+                                  (_, j) => j !== i
+                                ),
+                              });
+                            }}
+                          >
                             <FaTrash />
                           </button>
                         </div>

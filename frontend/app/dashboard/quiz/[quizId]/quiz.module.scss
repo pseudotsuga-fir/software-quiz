@@ -3,11 +3,22 @@
 
   .header {
     display: flex;
-    gap: 12px;
-    width: 50%;
+    justify-content: space-between;
+    width: 100%;
 
-    .timeLimit {
-      width: 270px;
+    .left {
+      display: flex;
+      gap: 12px;
+      width: 50%;
+
+      .timeLimit {
+        width: 270px;
+      }
+    }
+
+    .right {
+      display: flex;
+      gap: 12px;
     }
   }
 

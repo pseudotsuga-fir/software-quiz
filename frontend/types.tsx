@@ -7,7 +7,7 @@ export interface Quiz {
   id?: number;
   title?: string;
   questions?: Question[];
-  time_limit?: Date;
+  time_limit?: string;
 }
 
 export interface Question {
@@ -15,5 +15,5 @@ export interface Question {
   description?: string;
   options?: string[];
   answers?: string[];
-  type: "multiple_choice" | "select_all" | "text";
+  question_type: "multiple_choice" | "select_all" | "text";
 }
