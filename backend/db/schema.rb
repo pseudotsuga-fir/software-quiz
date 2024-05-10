@@ -10,16 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_07_045918) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_10_032905) do
   create_table "questions", force: :cascade do |t|
     t.integer "quiz_id"
     t.string "question"
     t.string "description"
     t.string "options"
-    t.string "answer"
-    t.string "type"
+    t.string "question_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "answers", default: "--- []\n"
     t.index ["quiz_id"], name: "index_questions_on_quiz_id"
   end
 
@@ -27,7 +27,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_07_045918) do
     t.string "status"
     t.string "recipient_name"
     t.string "title"
-    t.time "time_limit"
+    t.string "time_limit"
     t.datetime "expiry_date"
     t.integer "score"
     t.datetime "created_at", null: false

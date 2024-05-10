@@ -3,13 +3,14 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useFetch } from "use-http";
+import { useUserStore } from "@/hooks/appstate";
 
 export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { post, cache, response } = useFetch(`/auth/login`);
+  const { post, cache, response } = useFetch(`/api/auth/login`);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -18,9 +19,12 @@ export default function Login() {
       credentials: "include",
     });
     if (response.ok) {
+      const user = await response.json();
+      useUserStore.setState({ user: user.data.user });
       router.push("/");
     } else {
       console.log("Error", response);
+      useUserStore.setState({ user: undefined });
     }
     cache.clear();
   }

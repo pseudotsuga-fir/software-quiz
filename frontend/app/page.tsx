@@ -1,9 +1,12 @@
 "use client";
 
+import { useUserStore } from "@/hooks/appstate";
 import styles from "./home.module.scss";
+
 export default function Home() {
   async function fetchQuizzes() {
-    await fetch("/quizzes").then((response) => response.json());
+    await fetch("/api/quizzes").then((response) => response.json());
+    console.log(useUserStore.getState().user);
   }
 
   return (
