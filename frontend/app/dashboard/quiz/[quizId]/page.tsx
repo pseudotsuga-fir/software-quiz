@@ -77,7 +77,7 @@ export default function CRUDQuiz({
 
   return (
     <div className={styles.quizBody}>
-      {quiz?.id ? <h2>Edit "{quiz?.title}"</h2> : <h2>Create a new quiz</h2>}
+      {quiz?.id ? <h2>{"Edit ${quiz?.title}"}</h2> : <h2>Create a new quiz</h2>}
       <form onSubmit={onSubmit}>
         <div className={styles.header}>
           <div className={styles.left}>
@@ -179,7 +179,7 @@ export default function CRUDQuiz({
                         <p>Option</p>
                       </div>
                       {question.options?.map((option, i) => (
-                        <div className={styles.option}>
+                        <div className={styles.option} key={i}>
                           <input
                             className={styles.isAnswer}
                             type={

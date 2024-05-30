@@ -11,9 +11,9 @@ Quiz admins are able to view quiz results from the admin dashboard.
 
 Use RVM (ruby version manager) to use versions specified for this project.
 
-- Start by installing correct ruby version: `rvm install $(cat .ruby-version)
-`
+- Start by installing correct ruby version: `rvm install $(cat .ruby-version)`
 - Install gems: `bundle install`
+- Add the secret to unlock the variables in the app. Secret key goes in `master.key`. Ask the maintainer of this project for the key.
 - To start the backend, run `bin/rails server`.
 
 ### Frontend
